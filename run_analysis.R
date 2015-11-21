@@ -5,11 +5,12 @@
 library(data.table)
 library(dplyr)
 
-## download the data and unzip the files into the workign directory
+## if not already done, download the data and unzip the files into the working directory
+if (!file.exists("rawData.zip")) { 
 URL <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 download.file(URL, "rawData.zip")
 unzip("rawData.zip")
-
+}
 ## form the data frame for test by reading the subject_test data into the first column.  Then read the 
 ## activity data into the second column using cbind.  Then read the measurement data and use 
 ## cbind to combine.
@@ -58,6 +59,11 @@ meanDF <- train_test %>% ## within the train_test data frame
 
 ## write the file to disk
 write.table(meanDF, "tidy_data.txt",  row.names = FALSE, sep=" ")
-## test read the data back in to a data frame to make sure it is formated correctly
-test <- fread("tidy_data.txt") ## looks good
+
+## test read the data back in to a data frame to make sure it is formated correctly.  Get the file from the link
+## that points to the file upload for the assignment submission.
+
+URL <- "https://s3.amazonaws.com/coursera-uploads/user-06e8aa5bcd92577e9499b796/975118/asst-3/8e54ff10909511e59d30135692c38c70.txt"
+test_tidy_data <- fread(URL, showProgress = FALSE) 
+View(test_tidy_data)
 
